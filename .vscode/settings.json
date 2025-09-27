@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "filepng.h": "c",
+        "mainfunc.h": "c",
+        "color.h": "c",
+        "line.h": "c",
+        "multithread_draw.h": "c",
+        "timing.h": "c",
+        "pendulum.h": "c",
+        "stat.h": "c",
+        "stb_image.h": "c",
+        "stdint.h": "c",
+        "stdlib.h": "c"
+    }
+}

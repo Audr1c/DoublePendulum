@@ -1,0 +1,19 @@
+{
+	"nodes":[
+		{"id":"cbec860416ba5c34","type":"text","text":"# FilePNG\n\n## Structures\nPixel \n```C\ntypedef struct {\n\tint r;\n\tint g;\n\tint b;\n\tint a;\t\n} pix;\n```\nImage \n```C\ntypedef struct {\n\tint width, height, numChannel;\n\tpix ** matrix;\n} _img, *Image;\n```\n\n## Function needed\nModify a pixel in a Image\nBrush from GPT\nSave to a PNG file \n\n","x":-460,"y":-100,"width":460,"height":680,"color":"3"},
+		{"id":"52f49b635c5390fd","type":"text","text":"# Color\n\n## Function needed\nColor conversion HSV to RGBA\n\n","x":-940,"y":-500,"width":440,"height":290,"color":"#00cc74"},
+		{"id":"25eefa8ac04e6485","type":"text","text":"# Main\n\n\n## Function needed\n### test function\nCreate a few line on a small canvas of different colors \nSimple pendulum\nDouble pendulum\n### Real programs\nMulti simple pendulum\nMulti double pendulum\n\n\n","x":1160,"y":-100,"width":460,"height":580,"color":"1"},
+		{"id":"e3d39a224d3e741d","type":"text","text":"# Line\n\n## Function needed\nCreate a line \n","x":80,"y":-100,"width":460,"height":200,"color":"5"},
+		{"id":"e98f7d2399bf59f4","type":"text","text":"# Simple Pendulum\n\n## Structures\nPendulum\n```C\ntypedef struct {\n\tfloat x1,y1; // fixe\n\tfloat x2, y2; // tip\n\tfloat vx2,vy2; // speed tip\n\tfloat mass;\n\tpix color;\n} *SimplePen;\n```\nConstante \nGravity g\n## Function needed\ncreate a pendulum\nupdate pendulum (dt)\ndraw pendulum\n\n## Todo\nWorkout the math of the forces","x":600,"y":-100,"width":460,"height":620,"color":"3"},
+		{"id":"d25191e173d59405","type":"file","file":"Excalidraw/Simple pendulum math.md","x":630,"y":580,"width":400,"height":400},
+		{"id":"846fcdb373a18f89","type":"text","text":"## Bilan des forces\n- $\\overrightarrow P = m\\overrightarrow g$\n- $\\overrightarrow T$ (tension du fil)\n- pas de frottement air\n\n## PFD\n$\\sum \\overrightarrow F = m\\overrightarrow a \\propto \\overrightarrow N$\nDonc on fait un projetée de $\\overrightarrow P$ sur le vecteur normale $\\overrightarrow N$ ce qui donne $m\\overrightarrow a = L m g cos(\\theta)$\nSoit $\\overrightarrow a = L g cos(\\theta) \\approx L g \\theta$ \n\n\n\n","x":630,"y":1080,"width":490,"height":320},
+		{"id":"b325b40608749e26","type":"text","text":"# #Todo List\n\n- mkdir folder\n- auto script everything\n- Canvas\n- Separer en petite vidéo a coller ensemble\n- automate video add music fade etc OK\n- automate preview vid\n---\n\n- Optimise greatly \n- see how to make it MT again\n- see if alpha is necesseary\n- transition from one cmap to the other\n- Color palette\n--- \n\n- Video directly in C","x":1880,"y":182,"width":580,"height":678},
+		{"id":"1d435fa859e5ffeb","type":"text","text":"# Task\n- Inferno\n- ","x":2500,"y":182,"width":368,"height":398}
+	],
+	"edges":[
+		{"id":"3e06449a04f59f07","fromNode":"25eefa8ac04e6485","fromSide":"top","toNode":"e98f7d2399bf59f4","toSide":"top"},
+		{"id":"8d118747bab65176","fromNode":"e98f7d2399bf59f4","fromSide":"top","toNode":"e3d39a224d3e741d","toSide":"top"},
+		{"id":"a7a7b71d08b5a4cb","fromNode":"e98f7d2399bf59f4","fromSide":"top","toNode":"52f49b635c5390fd","toSide":"right"},
+		{"id":"80b762419a1b2599","fromNode":"e98f7d2399bf59f4","fromSide":"bottom","toNode":"d25191e173d59405","toSide":"top"}
+	]
+}

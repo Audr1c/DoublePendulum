@@ -1,0 +1,7 @@
+# Ignore all BMP image files
+*.bmp
+
+# Ignore all MP4 video files
+*.mp4
+
+.obsidian/
