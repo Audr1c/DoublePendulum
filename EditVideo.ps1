@@ -12,6 +12,22 @@ $startFadeD = 10
 $EndFade = 101
 $endFadeD = 0.2
 
+# Create folders if they don't exist
+if (!(Test-Path $resourcesFolder)) {
+    New-Item -ItemType Directory -Path $resourcesFolder
+}
+if (!(Test-Path "${resourcesFolder}/${folderOutput}")) {
+    New-Item -ItemType Directory -Path "${resourcesFolder}/${folderOutput}"
+}
+if (!(Test-Path "${resourcesFolder}/${folderVideo}")) {
+    New-Item -ItemType Directory -Path "${resourcesFolder}/${folderVideo}"
+}
+if (!(Test-Path "${resourcesFolder}/${folderTemp}")) {
+    New-Item -ItemType Directory -Path "${resourcesFolder}/${folderTemp}"
+}
+if (!(Test-Path "${resourcesFolder}/${folderMusic}")) {
+    New-Item -ItemType Directory -Path "${resourcesFolder}/${folderMusic}"
+}
 # ffmpeg -framerate 60 -i test/images%d.bmp -c:v libx264 -pix_fmt yuv420p Doublevirdis2.mp4
 
 # Rassemble toute les video de video/$nameFile_$i

@@ -31,6 +31,23 @@ $dt = 0.015
 $alpha = 10
 $cmap = "inferno"
 
+# Create folders if they don't exist
+if (!(Test-Path $resourcesFolder)) {
+    New-Item -ItemType Directory -Path $resourcesFolder
+}
+if (!(Test-Path "${resourcesFolder}/${folderImage}")) {
+    New-Item -ItemType Directory -Path "${resourcesFolder}/${folderImage}"
+}
+if (!(Test-Path "${resourcesFolder}/${folderVideo}")) {
+    New-Item -ItemType Directory -Path "${resourcesFolder}/${folderVideo}"
+}
+if (!(Test-Path "${resourcesFolder}/${folderTemp}")) {
+    New-Item -ItemType Directory -Path "${resourcesFolder}/${folderTemp}"
+}
+if (!(Test-Path "${resourcesFolder}/${folderMusic}")) {
+    New-Item -ItemType Directory -Path "${resourcesFolder}/${folderMusic}"
+}
+
 
 
 $timeMusic = ffprobe -i "${folderMusic}/${musicName}.mp3" -show_entries format=duration -v quiet -of csv="p=0"
