@@ -27,10 +27,16 @@ static void *worker_draw_simple(void *p)
 static void *worker_draw_double(void *p)
 {
     WorkerArgs *w = (WorkerArgs *)p;
+    Timing t;
+    t.start = clock();
+    Measurement m = create_measurement(w->end_idx - w->start_idx, 4);
     for (int i = w->start_idx; i < w->end_idx; i++)
     {
-        draw_double_pendulum(w->temp, w->Dpens[i], w->sizeBrush);
+        draw_double_pendulum(w->temp, w->Dpens[i], w->sizeBrush, &m, i);
     }
+    t.end = clock();
+    printf("draw_double_pendulum : %f ms\n", (t.end - t.start) * 1000.0 / CLOCKS_PER_SEC);
+    printMeasurement(m);
     return NULL;
 }
 

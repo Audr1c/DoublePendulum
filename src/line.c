@@ -125,36 +125,13 @@ void draw_thick_line_fast(Image img, int x0, int y0, int x1, int y1, int thickne
     int err = dx - dy;
     int r = thickness / 2;
     int r2 = r * r;
-    // int i = 0;
     while (1)
     {
-        // i++;
-        // printf("%d\n", i);
-        // if (i == 686){
-        //     printf("x: %d, y: %d\n", x0, y0);
-        //     printf("dx: %d, dy: %d\n", dx, dy);
-        // }
         for (int yy = -r; yy <= r; yy++)
         {
             for (int xx = -r; xx <= r; xx++)
             {
-                // if (i == 686)
-                // {
-                //     printf("\n");
-                //     printf("    x: %d, y: %d\n", x0, y0);
-                //     printf("    xx: %d, yy: %d\n", xx, yy);
-                //     printf("r2 %d, sum : %d\n", r2, xx * xx + yy * yy);
-                // }
                 if (xx * xx + yy * yy <= r2 && x0 + xx >= 0 && x0 + xx < img->width && y0 + yy >= 0 && y0 + yy < img->height){
-                    
-                    // if (i == 686)
-                    // {
-                    //     printf("Here\n");
-                    //     printf("access point is %d\n", x0 + xx + img->width * (y0 + yy));
-                    //     printf("pixel is %d\n", img->matrix[x0 + xx + img->width *(y0 + yy)]);
-                    //     printf("matrix length is %d\n", img->width * img->height);
-
-                    // }
                     img->matrix[x0 + xx + img->width *(y0 + yy)] = blend_pixel(img->matrix[x0 + xx + img->width *(y0 + yy)], col);
                 }
             }

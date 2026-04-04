@@ -179,20 +179,44 @@ DoublePen free_double_pendulum(DoublePen pen){
     return NULL;
 }
 
-int draw_double_pendulum(Image img, DoublePen pen, int sizeBrush)
+int draw_double_pendulum(Image img, DoublePen pen, int sizeBrush, Measurement *meas, int i)
 {
     // convert theta to x1,y1, x2,y2, x3,y3
+    startMeasurement(*meas, 1, i);
     int x1 = pen->x;
     int y1 = pen->y;
     double scale = img->height / 100 / 2;
     int x2 = x1 + pen->l1 * scale * scaleFactor * cos(pen->th1 + M_PI / 2);
     int y2 = y1 + pen->l1 * scale * scaleFactor * sin(pen->th1 + M_PI / 2);
-
+    
     int x3 = x2 + pen->l2 * scale * scaleFactor * cos(pen->th2 - M_PI / 2);
     int y3 = y2 + pen->l2 * scale * scaleFactor * sin(pen->th2 - M_PI / 2);
-
+    endMeasurement(*meas, 1, i);
+    
+    startMeasurement(*meas, 2, i);
     draw_thick_line_fast(img, x2, y2, x3, y3, sizeBrush, pen->color);
+    endMeasurement(*meas, 2, i);
+    startMeasurement(*meas, 3, i);
     draw_thick_line_fast(img, x1, y1, x2, y2, sizeBrush, pen->color);
+    endMeasurement(*meas, 3, i);
+    return 0;
+}
+
+int draw_double_pendulum_OCL(OCL_System *ocl, Image img, DoublePen pen, int sizeBrush)
+{
+    int x1 = pen->x;
+    int y1 = pen->y;
+    double scale = img->height / 100 / 2;
+
+    int x2 = x1 + pen->l1 * scale * scaleFactor * cos(pen->th1 + M_PI / 2.0);
+    int y2 = y1 + pen->l1 * scale * scaleFactor * sin(pen->th1 + M_PI / 2.0);
+
+    int x3 = x2 + pen->l2 * scale * scaleFactor * cos(pen->th2 - M_PI / 2.0);
+    int y3 = y2 + pen->l2 * scale * scaleFactor * sin(pen->th2 - M_PI / 2.0);
+
+    draw_line(ocl, x2, y2, x3, y3, sizeBrush, pen->color);
+    draw_line(ocl, x1, y1, x2, y2, sizeBrush, pen->color);
+
     return 0;
 }
 

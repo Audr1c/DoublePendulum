@@ -20,7 +20,7 @@ $N_pend = 3000
 $skipFrames = 0
 $typePendulum = 2
 $thread = 1
-$sizeBrush = 12
+$sizeBrush = 4
 $updateColor = 0
 $startAngle = [math]::PI / 2
 $endAngle = [math]::PI / 2 + 0.1
@@ -28,7 +28,7 @@ $th1or2 = 1
 $propLength = 0.5
 $dt = 0.015
 # $dt = 1
-$alpha = 10
+$alpha = 150
 $cmap = "inferno"
 
 # Create folders if they don't exist

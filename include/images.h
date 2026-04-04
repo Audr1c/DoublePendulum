@@ -17,12 +17,15 @@
 
 
 // Pixel
+// typedef struct
+// {
+//     uint8_t r, g, b, a;
+// } pix, Pixel;
 typedef struct
 {
-    uint8_t r, g, b, a;
+    int r, g, b, a, n;
+    int padding[3];
 } pix, Pixel;
-
-
 
 // Image
 typedef struct

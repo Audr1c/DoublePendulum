@@ -10,6 +10,7 @@
 #include "pendulum.h"
 #include "timing.h"
 #include "multiThread_draw.h"
+#include "draw.h"
 
 
 typedef struct {

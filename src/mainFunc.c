@@ -88,11 +88,17 @@ int animationPendule(GeneralParameters geneP, Drawing_Param drawP)
             }
             else if (drawP.typePendulum == 2)
             {
-                if (draw_pendulums_mt(img, NULL, pend.dpen, geneP.numPendulums, drawP.sizeBrush, geneP.numThreads) != 0)
+                // if (draw_pendulums_mt(img, NULL, pend.dpen, geneP.numPendulums, drawP.sizeBrush, geneP.numThreads) != 0)
+                // {
+                //     fprintf(stderr, "Failed to draw pendulums\n");
+                //     return 1;
+                // };
+                if (draw_pendulums(img, pend.dpen, geneP.numPendulums, drawP.sizeBrush) != 0)
                 {
                     fprintf(stderr, "Failed to draw pendulums\n");
                     return 1;
                 };
+
             }
             if (geneP.meas != NULL)
                 endMeasurement(geneP.meas, 1, frame);
@@ -107,7 +113,7 @@ int animationPendule(GeneralParameters geneP, Drawing_Param drawP)
                 return 1;
             };
             if (geneP.meas != NULL)
-            endMeasurement(geneP.meas, 2, frame);
+                endMeasurement(geneP.meas, 2, frame);
         }
         // update the pendulums
         if (geneP.meas != NULL)

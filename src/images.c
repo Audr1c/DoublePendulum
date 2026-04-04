@@ -7,6 +7,7 @@ Pixel pixel(uint8_t r, uint8_t g, uint8_t b, uint8_t a){
     p.g = g;
     p.b = b;
     p.a = a;
+    p.n = 1;
     return p;
 }
 
@@ -42,6 +43,7 @@ Image create_blank_image(int width, int height, int numOfchan, pix bgCol){
         for (int j = 0; j < height; j++)
         {
             img->matrix[i * width + j] = bgCol;
+
         }
     }
     if(img == NULL){
@@ -71,14 +73,32 @@ int saveImage(Image img, const char *filename){
     //     }
 
     // }
+
     // stbi_write_png(filename, w, h, ch, img->matrix, w * ch);
-    stbi_write_bmp(filename, w, h, ch, img->matrix);
+
+    // create a new table of pixel (rgba) instead of rgban___
+    uint8_t *table = malloc(w * h * sizeof(*table)* ch);
+    for (int y = 0; y < h; y++)
+    {
+        for (int x = 0; x < w; x++)
+        {
+            int idx = (y * w + x) * ch; // pixel index in array
+            table[idx + 0] = img->matrix[x + y * w].r;        // R
+            table[idx + 1] = img->matrix[x + y * w].g;        // G
+            table[idx + 2] = img->matrix[x + y * w].b;        // B
+            if (ch == 4)
+                table[idx + 3] = img->matrix[x + y * w].a; // A (if present)
+        }
+    }
+    stbi_write_bmp(filename, w, h, ch, table);
+    free(table);
     // stbi_image_free(data);
     return 0;
-    //return stbi_write_png(filename, img->width, img->height, img->numChannel, img->matrix, img->width * img->numChannel);
+    // return stbi_write_png(filename, img->width, img->height, img->numChannel, img->matrix, img->width * img->numChannel);
 }
 
-Image free_image(Image img){
+Image free_image(Image img)
+{
     // for (int i = 0; i < img->width; i++)
     // {
     //     free(img->matrix[i]);
@@ -131,7 +151,7 @@ int createImage(Image img, char *folder, int frame)
     char filename[128];
     sprintf(filename, "resources/%s/images%d.bmp", folder, frame);
     // char *last_slash = strrchr(filename, '/');
-    //create_directory(filename, &last_slash);
+    // create_directory(filename, &last_slash);
     // save image
     if (saveImage(img, filename) != 0)
     {
