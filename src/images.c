@@ -7,7 +7,6 @@ Pixel pixel(uint8_t r, uint8_t g, uint8_t b, uint8_t a){
     p.g = g;
     p.b = b;
     p.a = a;
-    p.n = 1;
     return p;
 }
 
@@ -24,6 +23,7 @@ Image create_blank_image(int width, int height, int numOfchan, pix bgCol){
     img->height = height;
     img->numChannel = numOfchan;
     img->matrix = malloc(sizeof(pix) * width* height);
+    img->count = malloc(sizeof(int) * width* height);
     
     if (img->matrix == NULL) {
         fprintf(stderr, "Failed to allocate memory for image matrix width of size %d width, %d height\n", width, height);
@@ -43,7 +43,7 @@ Image create_blank_image(int width, int height, int numOfchan, pix bgCol){
         for (int j = 0; j < height; j++)
         {
             img->matrix[i * width + j] = bgCol;
-
+            img->count[i * width + j] = 1;
         }
     }
     if(img == NULL){
@@ -52,15 +52,83 @@ Image create_blank_image(int width, int height, int numOfchan, pix bgCol){
     return img;
 }
 
+int blackpixel(Image img){
+    int count = 0;
+    for (int i = 0; i < img->width; i++)
+    {
+        for (int j = 0; j < img->height; j++)
+        {
+            pix p = img->matrix[i * img->width + j];
+            if (p.r == 0 && p.g == 0 && p.b == 0)
+                count++;
+            if (img->count[i * img->width + j] != 1)
+                count -= 10000000;
+        }
+    }
+    return count;
+}
+// Image load_image(const char *filename);
 
-
-//Image load_image(const char *filename);
-
-int saveImage(Image img, const char *filename){
+int saveImage(Image img, const char *filename)
+{
     // lets copy th data to see if it changes anything
     int w = img->width;
     int h = img->height;
     int ch = img->numChannel;
+    int total_pixels = w * h;
+
+    uint8_t *buffer = (uint8_t *)malloc(total_pixels * ch);
+    if (!buffer || ch != 4)
+        return -1;
+
+    // Traitement séparé selon le nombre de canaux
+    
+    #pragma omp parallel for simd
+    for (int i = 0; i < total_pixels; i++)
+    {
+        int r = img->matrix[i].r;
+        int g = img->matrix[i].g;
+        int b = img->matrix[i].b;
+        int a = img->matrix[i].a;
+
+        buffer[i * 4 + 0] = r < 0 ? 0 : (r > 255 ? 255 : r);
+        buffer[i * 4 + 1] = g < 0 ? 0 : (g > 255 ? 255 : g);
+        buffer[i * 4 + 2] = b < 0 ? 0 : (b > 255 ? 255 : b);
+        buffer[i * 4 + 3] = a < 0 ? 0 : (a > 255 ? 255 : a);
+    }
+    int v = stbi_write_bmp(filename, w, h, ch, buffer);
+    if (v == 0){
+        // from source code : stb / stb_image_write.h
+        // [ Each function returns 0 on failure and non-0 on success.]
+        printf("Image not saved %s, error code: %d\n", filename, v);
+        // print a part of the buffer to see if it changes anything
+        for (int i = 0; i < 10; i++)
+        {
+            printf("\t%d %d %d %d\n", buffer[i * 4 + 0], buffer[i * 4 + 1], buffer[i * 4 + 2], buffer[i * 4 + 3]);
+        }
+        printf("End of buffer\n");
+    }
+    free(buffer);
+
+    return v == 0 ? -1 : 0;
+    // create a new table of pixel (rgba) instead of rgban___
+    // uint8_t *table = malloc(w * h * sizeof(*table)* ch);
+    // for (int y = 0; y < h; y++)
+    // {
+    //     for (int x = 0; x < w; x++)
+    //     {
+    //         int idx = (y * w + x) * ch; // pixel index in array
+    //         table[idx + 0] = img->matrix[x + y * w].r;        // R
+    //         table[idx + 1] = img->matrix[x + y * w].g;        // G
+    //         table[idx + 2] = img->matrix[x + y * w].b;        // B
+    //         if (ch == 4)
+    //             table[idx + 3] = img->matrix[x + y * w].a; // A (if present)
+    //     }
+    // }
+    // return 0;
+    // free(table);
+    // stbi_image_free(data);
+    // return stbi_write_png(filename, img->width, img->height, img->numChannel, img->matrix, img->width * img->numChannel);
     // unsigned char *data = malloc(w * h * ch);
     // for (int i = 0; i < w ; i++){
     //     for(int j = 0; j < h; j++){
@@ -75,26 +143,6 @@ int saveImage(Image img, const char *filename){
     // }
 
     // stbi_write_png(filename, w, h, ch, img->matrix, w * ch);
-
-    // create a new table of pixel (rgba) instead of rgban___
-    uint8_t *table = malloc(w * h * sizeof(*table)* ch);
-    for (int y = 0; y < h; y++)
-    {
-        for (int x = 0; x < w; x++)
-        {
-            int idx = (y * w + x) * ch; // pixel index in array
-            table[idx + 0] = img->matrix[x + y * w].r;        // R
-            table[idx + 1] = img->matrix[x + y * w].g;        // G
-            table[idx + 2] = img->matrix[x + y * w].b;        // B
-            if (ch == 4)
-                table[idx + 3] = img->matrix[x + y * w].a; // A (if present)
-        }
-    }
-    stbi_write_bmp(filename, w, h, ch, table);
-    free(table);
-    // stbi_image_free(data);
-    return 0;
-    // return stbi_write_png(filename, img->width, img->height, img->numChannel, img->matrix, img->width * img->numChannel);
 }
 
 Image free_image(Image img)
@@ -103,6 +151,7 @@ Image free_image(Image img)
     // {
     //     free(img->matrix[i]);
     // }
+    free(img->count);
     free(img->matrix);
     free(img);
     return NULL;

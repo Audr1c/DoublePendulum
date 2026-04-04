@@ -4,7 +4,7 @@ int draw_pendulums(Image final_img, DoublePen *Dpens, int numPendulums, int size
 {
     // setup the OpenCL system
     char *kernel_source = read_kernel_file("src/kernel.cl");
-    OCL_System ocl = setup_opencl(final_img->matrix, final_img->width, final_img->height, kernel_source);
+    OCL_System ocl = setup_opencl(final_img->matrix, final_img->count, final_img->width, final_img->height, kernel_source);
 
     // if (ocl.kernel == NULL)
     // {
@@ -22,6 +22,12 @@ int draw_pendulums(Image final_img, DoublePen *Dpens, int numPendulums, int size
 
     // cleanup
     fetch_and_average_image(&ocl, final_img);
+    int v = blackpixel(final_img);
+    if (v >= final_img->width * final_img->height )
+    {
+        printf("nb of black pixels: %d\n", v);
+        // return 1;
+    }
     // fetch_and_cleanup(&ocl, final_img->matrix);
     return 0;
 }

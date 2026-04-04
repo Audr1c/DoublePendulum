@@ -15,23 +15,24 @@
 #include "stb_image.h"
 #include "stb_image_write.h"
 
-
-// Pixel
 // typedef struct
 // {
-//     uint8_t r, g, b, a;
+//     int r, g, b, a, n;
+//     int padding[3];
 // } pix, Pixel;
-typedef struct
-{
-    int r, g, b, a, n;
-    int padding[3];
-} pix, Pixel;
 
 // Image
+
+// Pixel
+typedef struct
+{
+    int r, g, b, a; // before uint_8
+} pix, Pixel;
 typedef struct
 {
     int width, height, numChannel;
     pix *matrix;
+    int *count;
 } _img, *Image;
 
 #define MAX_BRUSH 64
@@ -55,5 +56,7 @@ int saveImage(Image img, const char *filename);
 Image free_image(Image img);
 
 int createImage(Image img, char *folder, int frame);
+
+int blackpixel(Image img);
 
 #endif

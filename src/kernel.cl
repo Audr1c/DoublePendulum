@@ -1,11 +1,10 @@
 typedef struct {
-    int r, g, b, a, n;
-    int padding[3]; 
+    int r, g, b, a;
 } Pixel;
 
 // Kernel OpenCL : Trace un segment avec atomic_add
 __kernel void draw_segment(
-    __global Pixel *img, int img_w, int img_h,
+    __global Pixel *img, __global int *count, int img_w, int img_h,
     int x1, int y1, int x2, int y2, // Coordonnées des deux extrémités du segment
     int radius,
     int r, int g, int b, int a)     // Couleur appliquée
@@ -46,6 +45,6 @@ __kernel void draw_segment(
         atomic_add(&img[idx].g, g);
         atomic_add(&img[idx].b, b);
         atomic_add(&img[idx].a, a);
-        atomic_add(&img[idx].n, 1);
+        atomic_add(&count[idx], 1);
     }
 }

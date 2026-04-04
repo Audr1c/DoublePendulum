@@ -7,7 +7,7 @@ int main()
     Image img = create_blank_image(128, 128, 4, bg);
 
     char *kernel_source = read_kernel_file("src/kernel.cl");
-    OCL_System ocl = setup_opencl(img->matrix, img->width, img->height, kernel_source);
+    OCL_System ocl = setup_opencl(img->matrix,img->count, img->width, img->height, kernel_source);
 
     // Draw few lines 
     draw_line(&ocl, 0, 0, 128, 128, 6, pixel(255, 0, 0, 128));

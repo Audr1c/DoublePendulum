@@ -29,4 +29,14 @@ Idée pour regler les 2 probleme en 1
 
         
 
-Ets ce que `clSetKernelArg` remplace les parametre ou ajoute a la queue ?
+Ets ce que `clSetKernelArg` remplace les parametre ou ajoute a la queue ? (apparement ca va)
+
+
+Les problemes :
+- Image noirs parfaois (random (plus souvent au devbut d'une rafle))
+- Iamge decalé voir testline
+- mesure du temps category 1 nule sur les rafles post 0-200
+
+
+Endroit non opti :
+reciture des image en rgba <-rgban___ 
